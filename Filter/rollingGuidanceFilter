@@ -34,6 +34,12 @@
  *  the use of this software, even if advised of the possibility of such damage.
  */
 
+/*
+ * created by: Zhou Chao
+ * email: zhouc@cse.cuhk.edu.hk
+ * at: 2015.09.11
+ */
+
 #include <opencv2/ximgproc.hpp>
 
 namespace cv
