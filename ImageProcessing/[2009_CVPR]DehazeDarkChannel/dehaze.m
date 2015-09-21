@@ -53,13 +53,13 @@ function [J, Depth] = dehaze(I, window_size, haze_removal_percentage)
 
     % find the transmission map
     %   t = 1 - w * dark_channel_of(I ./ A)
-    normalized_I = bsxfun(@rdivide, I, A);
+    A = repmat(A, [h, w, 1]);
+    normalized_I = I ./ A;
     atmosphere_transmission = 1 - haze_removal_percentage * ...
         compute_darkchannel(normalized_I, window_size);
 
     % refine the transmission map
     atmosphere_transmission = joint_wls_filter(atmosphere_transmission, I, 0.7);
-    
     
     % recover the scene radiance
     %   J = (I - A) ./ t + A
@@ -68,6 +68,5 @@ function [J, Depth] = dehaze(I, window_size, haze_removal_percentage)
     
     Depth = atmosphere_transmission;
     
-    tmp = bsxfun(@rdivide, bsxfun(@minus, I, A), atmosphere_transmission);
-    J = bsxfun(@plus, tmp, A);
+    J = A + (I - A) ./ repmat(atmosphere_transmission, [1,1,3]);
 end
